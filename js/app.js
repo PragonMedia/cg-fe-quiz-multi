@@ -611,7 +611,7 @@ $("button.form-step-btn[data-form-step='3']").on("click", function () {
     }
     if (resultInstruction) {
       resultInstruction.textContent =
-        "Tap the button below to call now and get up to $25,000 in burial insurance. It only takes 2 minutes. The discount ends today so call now before it's too late!";
+        "Tap the button below to call now and get up to $25,000 in burial insurance. It only takes 2 minutes. The discounted monthly payments ends today so call now before it's too late!";
     }
     (async function () {
       await updatePhoneNumberReactive();
@@ -624,7 +624,7 @@ $("button.form-step-btn[data-form-step='3']").on("click", function () {
   } else {
     if (resultInstruction) {
       resultInstruction.textContent =
-        "Tap the button below to call now and get up to $25,000 in burial insurance. It only takes 2 minutes. The discount ends today so call now before it's too late!";
+        "Tap the button below to call now and get up to $25,000 in burial insurance. It only takes 2 minutes. The discounted monthly payments ends today so call now before it's too late!";
     }
     showClaimNowButton();
     startCountdown();
