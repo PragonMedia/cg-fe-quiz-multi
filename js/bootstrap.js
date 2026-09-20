@@ -1,23 +1,35 @@
-var PLANCOMPARE_BASE = "https://plancompared.com/";
-var PLANCOMPARE_REDIRECT_DELAY_MS = 7000;
-var plancompareRedirectTimerId = null;
+var POST_CALL_REDIRECT_DELAY_MS = 10000;
+var POST_CALL_REDIRECT_BASE = "https://www.qtf3vzawnz.com/NX2GBD/ZZ783F/";
+var postCallRedirectTimerId = null;
 
-function isMobileForPlancompareRedirect() {
-  if (typeof window.innerWidth === "number" && window.innerWidth < 768) {
-    return true;
-  }
-  var ua = navigator.userAgent || "";
-  return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
-    ua.toLowerCase(),
-  );
+function getRedirectParam(name) {
+  var params = new URLSearchParams(window.location.search);
+  var value = params.get(name);
+  if (value != null && String(value).trim() !== "") return value;
+  try {
+    var stored = JSON.parse(
+      sessionStorage.getItem("original_url_params") || "{}",
+    );
+    if (stored[name] != null && String(stored[name]).trim() !== "") {
+      return stored[name];
+    }
+  } catch (err) {}
+  return "";
 }
 
-function passesPlancompareUrlGate() {
-  var params = new URLSearchParams(window.location.search);
-  if (params.get("key") !== "X184GA") return false;
-  var mb = params.get("mb");
-  if (mb == null || String(mb).trim() === "") return false;
-  return true;
+function buildPostCallRedirectUrl() {
+  var clickid =
+    getRedirectParam("clickid") ||
+    getRedirectParam("rtkcid") ||
+    localStorage.getItem("rt_clickid") ||
+    "";
+  var url = new URL(POST_CALL_REDIRECT_BASE);
+  url.searchParams.set("uid", "4956");
+  url.searchParams.set("sub1", getRedirectParam("sub18"));
+  url.searchParams.set("sub3", clickid);
+  url.searchParams.set("sub4", getRedirectParam("sub1"));
+  url.searchParams.set("sub5", getRedirectParam("sub11"));
+  return url.toString();
 }
 
 function trackGTG(e) {
@@ -37,25 +49,14 @@ function trackGTG(e) {
     }
   } catch (err) {}
 
-  if (
-    localStorage.getItem("gtg") === null &&
-    passesPlancompareUrlGate() &&
-    isMobileForPlancompareRedirect()
-  ) {
-    if (plancompareRedirectTimerId != null) {
-      clearTimeout(plancompareRedirectTimerId);
-      plancompareRedirectTimerId = null;
-    }
-    plancompareRedirectTimerId = setTimeout(function () {
-      plancompareRedirectTimerId = null;
-      if (localStorage.getItem("gtg") !== null) return;
-      if (!passesPlancompareUrlGate()) return;
-      if (!isMobileForPlancompareRedirect()) return;
-      var q = window.location.search || "";
-      window.location.href =
-        PLANCOMPARE_BASE.replace(/\/?$/, "/") + (q || "");
-    }, PLANCOMPARE_REDIRECT_DELAY_MS);
+  if (postCallRedirectTimerId != null) {
+    clearTimeout(postCallRedirectTimerId);
+    postCallRedirectTimerId = null;
   }
+  postCallRedirectTimerId = setTimeout(function () {
+    postCallRedirectTimerId = null;
+    window.location.href = buildPostCallRedirectUrl();
+  }, POST_CALL_REDIRECT_DELAY_MS);
 
   setTimeout(() => {
     window.location.href = phoneLink;
