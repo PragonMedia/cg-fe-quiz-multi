@@ -495,7 +495,7 @@ function showResultPanel() {
     resultPanel.style.display = "block";
     resultPanel.classList.add("active");
   }
-  if (mainTitle) mainTitle.textContent = "Congratulations";
+  if (mainTitle) mainTitle.textContent = "CONGRATULATIONS";
 }
 
 // Drop this HTML on your external host, then set CLAIM_REDIRECT_HREF to that full URL.
